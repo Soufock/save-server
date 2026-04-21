@@ -5,8 +5,8 @@ const app = express();
 const port = 8099;
 
 // 中间件
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // 初始化文件保存服务
 const fileService = new FileSaveService('./saved-files');
