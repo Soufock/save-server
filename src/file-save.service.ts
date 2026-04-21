@@ -12,6 +12,14 @@ export interface SaveResponse {
   filePath?: string;
 }
 
+export interface FileCheckResponse {
+  exists: boolean;
+  fileName: string;
+  filePath?: string;
+  fileSize?: number;
+  lastModified?: string;
+}
+
 export class FileSaveService {
   private saveDirectory: string;
 
@@ -56,6 +64,35 @@ export class FileSaveService {
         message: `保存失败: ${errorMessage}`
       };
     }
+  }
+
+  /**
+   * 检查文件是否存在
+   * @param fileName 文件名称
+   * @returns 文件检查结果
+   */
+  checkFileExists(fileName: string): FileCheckResponse {
+    // 防止路径遍历攻击
+    const safeFileName = path.basename(fileName);
+    const filePath = path.join(this.saveDirectory, safeFileName);
+
+    const exists = fs.existsSync(filePath);
+
+    if (exists) {
+      const stats = fs.statSync(filePath);
+      return {
+        exists: true,
+        fileName: safeFileName,
+        filePath: filePath,
+        fileSize: stats.size,
+        lastModified: stats.mtime.toISOString()
+      };
+    }
+
+    return {
+      exists: false,
+      fileName: safeFileName
+    };
   }
 
   /**

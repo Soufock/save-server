@@ -45,6 +45,17 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', message: '服务运行正常' });
 });
 
+/**
+ * GET /check/:fileName
+ * 检查文件是否存在
+ */
+app.get('/check/:fileName', (req: Request, res: Response) => {
+  const fileName = req.params.fileName as string;
+
+  const result = fileService.checkFileExists(fileName);
+  res.status(200).json(result);
+});
+
 // 启动服务器
 app.listen(port, () => {
   console.log(`服务器已启动: http://localhost:${port}`);
