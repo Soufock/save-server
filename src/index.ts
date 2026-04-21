@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { FileSaveService } from './file-save.service';
 
 const app = express();
-const port = 3000;
+const port = 8099;
 
 // 中间件
 app.use(express.json());
